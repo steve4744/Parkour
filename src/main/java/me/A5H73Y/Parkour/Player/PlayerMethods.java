@@ -44,12 +44,13 @@ public class PlayerMethods {
 		prepareJoinPlayer(player, course.getName());
 		player.teleport(course.getCheckpoint().getLocation());
 		CourseMethods.increaseView(course.getName());
+		String title = Utils.getTranslation("Parkour.Join", false).replace("%COURSE%", course.getName());
 
 		if (getParkourSession(player.getName()) == null) {
 			if (course.getMaxDeaths() == null){
-				Utils.sendTitle(player, Utils.getTranslation("Parkour.Join", false).replace("%COURSE%", course.getName()));
+				Utils.sendTitle(player, title);
 			} else {
-				Utils.sendFullTitle(player, Utils.getTranslation("Parkour.Join", false).replace("%COURSE%", course.getName()), 
+				Utils.sendFullTitle(player, title, 
 						Utils.getTranslation("Parkour.JoinLives", false).replace("%AMOUNT%", course.getMaxDeaths().toString()));
 			}
 		} else {
@@ -60,6 +61,11 @@ public class PlayerMethods {
 
 		addPlayer(player.getName(), new ParkourSession(course));
 		setupPlayerMode(player);
+		
+		ParkourSession session = getParkourSession(player.getName());
+		session.bossBar();
+		session.getBossBar().addPlayer(player);
+		session.getBossBar().setTitle(title);
 	}
 
 	/**
@@ -81,6 +87,7 @@ public class PlayerMethods {
 		preparePlayer(player, Parkour.getParkourConfig().getConfig().getInt("OnFinish.SetGamemode"));
 		CourseMethods.joinLobby(null, player);
 		loadInventory(player);
+		session.getBossBar().removePlayer(player);
 
 		if (Static.containsHidden(player.getName()))
 			toggleVisibility(player, true);
@@ -153,7 +160,7 @@ public class PlayerMethods {
 		if (isPlayerInTestmode(player.getName()))
 			return;
 
-		ParkourSession session = getParkourSession(player.getName());
+		final ParkourSession session = getParkourSession(player.getName());
 		final String courseName = session.getCourse().getName();
 
 		if (Parkour.getParkourConfig().getConfig().getBoolean("OnFinish.EnforceCompletion") && session.getCheckpoint() != (session.getCourse().getCheckpoints())) {
@@ -181,11 +188,13 @@ public class PlayerMethods {
 				Bukkit.getScheduler().scheduleSyncDelayedTask(Parkour.getPlugin(), new Runnable() {
 					public void run() {
 						courseCompleteLocation(player, courseName);
+						session.getBossBar().removePlayer(player);
 					}
 				}, delay);
 
 			} else {
 				courseCompleteLocation(player, courseName);
+				session.getBossBar().removePlayer(player);
 			}
 		}
 
@@ -967,11 +976,16 @@ public class PlayerMethods {
 	 */
 	public static void increaseCheckpoint(ParkourSession session, Player player) {
 		session.increaseCheckpoint();
-
-		if (session.getCourse().getCheckpoints() == session.getCheckpoint())
-			player.sendMessage(Utils.getTranslation("Event.AllCheckpoints"));
-		else
-			player.sendMessage(Utils.getTranslation("Event.Checkpoint") + session.getCheckpoint() + " / " + session.getCourse().getCheckpoints());
+		String title;
+		
+		if (session.getCourse().getCheckpoints() == session.getCheckpoint()) {
+			title = Utils.getTranslation("Event.AllCheckpoints");
+		} else {
+			title = Utils.getTranslation("Event.Checkpoint") + session.getCheckpoint() + " / " + session.getCourse().getCheckpoints();
+		}
+		player.sendMessage(title);
+		session.getBossBar().setProgress((double)session.getCheckpoint() / session.getCourse().getCheckpoints());
+		session.getBossBar().setTitle(title);
 	}
 
 	/**

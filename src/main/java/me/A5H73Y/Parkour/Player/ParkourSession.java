@@ -1,6 +1,13 @@
 package me.A5H73Y.Parkour.Player;
 
 import java.io.Serializable;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
+import org.bukkit.Bukkit;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 
 import me.A5H73Y.Parkour.Course.CheckpointMethods;
 import me.A5H73Y.Parkour.Course.Course;
@@ -18,6 +25,7 @@ public class ParkourSession implements Serializable {
 	private Course course;
 	private ParkourMode mode;
 	private boolean useTrail;
+	private BossBar bossBar;
 
 	/**
 	 * This is the ParkourSession object.
@@ -85,5 +93,15 @@ public class ParkourSession implements Serializable {
 
 	public boolean getUseTrail() {
 		return useTrail;
+	}
+	
+	public void bossBar() {
+		Random random = ThreadLocalRandom.current();
+		int index = random.nextInt(BarColor.values().length);
+		this.bossBar = Bukkit.createBossBar("Parkour", BarColor.values()[index], BarStyle.SEGMENTED_10);
+	}
+	
+	public BossBar getBossBar() {
+		return bossBar;
 	}
 }
