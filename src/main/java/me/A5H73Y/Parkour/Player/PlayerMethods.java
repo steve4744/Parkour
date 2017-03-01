@@ -988,11 +988,16 @@ public class PlayerMethods {
 	 */
 	public static void increaseCheckpoint(ParkourSession session, Player player) {
 		session.increaseCheckpoint();
+		String title;
 
 		if (session.getCourse().getCheckpoints() == session.getCheckpoint())
-			player.sendMessage(Utils.getTranslation("Event.AllCheckpoints"));
+			title = Utils.getTranslation("Event.AllCheckpoints");
 		else
-			player.sendMessage(Utils.getTranslation("Event.Checkpoint") + session.getCheckpoint() + " / " + session.getCourse().getCheckpoints());
+			title = Utils.getTranslation("Event.Checkpoint") + session.getCheckpoint() + " / " + session.getCourse().getCheckpoints();
+		
+		player.sendMessage(title);
+		session.getBossBar().setProgress((double)session.getCheckpoint() / session.getCourse().getCheckpoints());
+		session.getBossBar().setTitle(title);
 	}
 
 	/**

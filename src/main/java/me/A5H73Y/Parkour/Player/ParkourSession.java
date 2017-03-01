@@ -126,4 +126,14 @@ public class ParkourSession implements Serializable {
 	public boolean getUseTrail() {
 		return useTrail;
 	}
+	
+	public void bossBar () {
+		Random random = ThreadLocalRandom.current();
+		int index = random.nextInt(BarColor.values().length);
+		this.bossBar = Bukkit.createBossBar("Parkour", BarColor.values()[index], BarStyle.SEGMENTED_10);
+	}
+	
+	public BossBar getBossBar() {
+		return bossBar;
+	}
 }
