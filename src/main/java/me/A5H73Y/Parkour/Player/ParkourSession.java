@@ -9,12 +9,24 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 
+import me.A5H73Y.Parkour.Parkour;
 import me.A5H73Y.Parkour.Course.CheckpointMethods;
 import me.A5H73Y.Parkour.Course.Course;
 import me.A5H73Y.Parkour.Course.CourseMethods;
 import me.A5H73Y.Parkour.Enums.ParkourMode;
+import me.A5H73Y.Parkour.Utilities.Static;
 import me.A5H73Y.Parkour.Utilities.Utils;
 
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+
+/**
+ * This work is licensed under a Creative Commons 
+ * Attribution-NonCommercial-ShareAlike 4.0 International License. 
+ * https://creativecommons.org/licenses/by-nc-sa/4.0/
+ *
+ * @author A5H73Y
+ */
 public class ParkourSession implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -25,6 +37,7 @@ public class ParkourSession implements Serializable {
 	private Course course;
 	private ParkourMode mode;
 	private boolean useTrail;
+	private int seconds;
 	private BossBar bossBar;
 
 	/**
@@ -44,6 +57,25 @@ public class ParkourSession implements Serializable {
 		this.timestarted = System.currentTimeMillis();
 		this.course = course;
 		this.mode = CourseMethods.getCourseMode(course.getName());
+	}
+	
+	public void startVisualTimer(final Player player) {
+		if (!Static.getBountifulAPI() ||
+				!Parkour.getParkourConfig().getConfig().getBoolean("OnCourse.DisplayLiveTime") || 
+				Static.containsQuiet(player.getName()))
+			return;
+		
+		new BukkitRunnable() {
+            @Override
+            public void run() {
+            	if (!PlayerMethods.isPlaying(player.getName())) {
+            		Utils.sendActionBar(player, "");
+            		cancel();
+            	} else {
+            		Utils.sendActionBar(player, Utils.convertSecondsToTime(++seconds));
+            	}
+            }
+        }.runTaskTimer(Parkour.getPlugin(), 20, 20);
 	}
 
 	public int getDeaths() {
@@ -93,15 +125,5 @@ public class ParkourSession implements Serializable {
 
 	public boolean getUseTrail() {
 		return useTrail;
-	}
-	
-	public void bossBar() {
-		Random random = ThreadLocalRandom.current();
-		int index = random.nextInt(BarColor.values().length);
-		this.bossBar = Bukkit.createBossBar("Parkour", BarColor.values()[index], BarStyle.SEGMENTED_10);
-	}
-	
-	public BossBar getBossBar() {
-		return bossBar;
 	}
 }
