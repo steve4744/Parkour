@@ -346,6 +346,7 @@ public class Configurations {
 			stringData.addDefault("Other.Item_LastCheckpoint", "&7SHIFT + &6Right click to go back to last checkpoint");
 			stringData.addDefault("Other.Item_HideAll", "&7SHIFT + &6Right click to toggle visibility");
 			stringData.addDefault("Other.Item_Leave", "&7SHIFT + &6Right click to leave course");
+			stringData.addDefault("Other.Item_HideTime", "&7SHIFT + &6Right click to toggle timer");
 			stringData.addDefault("Other.Item_Book", "&6View course stats");
 			stringData.addDefault("Other.Reload", "Config Reloaded!");
 			stringData.addDefault("Other.Kit", "ParkourKit Given!");
@@ -416,6 +417,7 @@ public class Configurations {
 		config.addDefault("OnJoin.Item.HideAll.Material", "BONE");
 		config.addDefault("OnJoin.Item.HideAll.Global", true);
 		config.addDefault("OnJoin.Item.Leave.Material", "SAPLING");
+		config.addDefault("OnJoin.Item.HideTime.Material", "WATCH");
 
 		config.addDefault("OnCourse.UseParkourKit", true);
 		config.addDefault("OnCourse.DieInLiquid", false);

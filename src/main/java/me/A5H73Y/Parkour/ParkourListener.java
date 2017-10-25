@@ -384,6 +384,11 @@ public class ParkourListener implements Listener {
                 event.setCancelled(true);
                 PlayerMethods.playerLeave(player);
             }
+        } else if(Utils.getMaterialInPlayersHand(player) == Parkour.getSettings().getHideTime()) {
+        	if (Utils.delayPlayerEvent(player, 1)) {
+        		event.setCancelled(true);
+        		Utils.toggleTime();
+        	}
         }
     }
 

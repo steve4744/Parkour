@@ -486,11 +486,16 @@ public final class Utils {
         if (Static.containsQuiet(player.getName()))
             return;
 
-        if (Static.getBountifulAPI() && attemptTitle) {
-            BountifulAPI.sendActionBar(player, title);
-        } else {
-            player.sendMessage(Static.getParkourString() + title);
+        if (Settings.isDisplayTimer()) {
+        	if (Static.getBountifulAPI() && attemptTitle) {
+        		BountifulAPI.sendActionBar(player, title);
+        	} else {
+        		player.sendMessage(Static.getParkourString() + title);
+        	}
         }
+    }
+    public static void toggleTime() {
+    	 Settings.setDisplayTimer(!Settings.isDisplayTimer());
     }
 
     /**

@@ -20,11 +20,13 @@ public class Settings {
             allowTrails, signPermission, attemptLessChecks, useParkourKit, preventAttackingEntities, displayMilliseconds,
             enforceSafeCheckpoints;
 
+	private static boolean displayTimer;
+
 	//Display
 	private boolean displayWelcome;
 
 	//Materials
-	private Material lastCheckpoint, hideall, leave;
+	private Material lastCheckpoint, hideall, leave, hideTime;
 
 	//Lists
 	private List<String> cmdWhitelist; 
@@ -47,10 +49,12 @@ public class Settings {
         preventAttackingEntities = config.getBoolean("OnCourse.PreventAttackingEntities");
         displayMilliseconds = config.getBoolean("Other.Display.ShowMilliseconds");
         enforceSafeCheckpoints = config.getBoolean("Other.EnforceSafeCheckpoints");
+        setDisplayTimer(config.getBoolean("OnCourse.DisplayLiveTime"));
 
 		lastCheckpoint = Material.getMaterial(config.getString("OnJoin.Item.LastCheckpoint.Material"));
 		hideall = Material.getMaterial(config.getString("OnJoin.Item.HideAll.Material"));
 		leave = Material.getMaterial(config.getString("OnJoin.Item.Leave.Material"));
+		hideTime = Material.getMaterial(config.getString("OnJoin.Item.HideTime.Material"));
 
 		displayWelcome = config.getBoolean("Other.Display.JoinWelcomeMessage");
 
@@ -124,6 +128,13 @@ public class Settings {
 		return leave;
 	}
 
+	public Material getHideTime() {
+        if (hideTime == Material.AIR)
+            return null;
+
+		return hideTime;
+	}
+	
 	public List<String> getCmdWhitelist() {
 		return cmdWhitelist;
 	}	
@@ -159,4 +170,13 @@ public class Settings {
     public boolean isEnforceSafeCheckpoints() {
     	return enforceSafeCheckpoints;
     }
+
+	public static boolean isDisplayTimer() {
+		return displayTimer;
+	}
+
+	public static void setDisplayTimer(boolean displayTimer) {
+		Settings.displayTimer = displayTimer;
+	}
+
 }

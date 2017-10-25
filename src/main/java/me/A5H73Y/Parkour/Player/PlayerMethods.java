@@ -690,6 +690,10 @@ public class PlayerMethods {
             player.getInventory().addItem(Utils.getItemStack(
                     Parkour.getSettings().getLeave(), Utils.getTranslation("Other.Item_Leave", false)));
 
+        if (Parkour.getSettings().getHideTime() != null && !player.getInventory().contains(Parkour.getSettings().getHideTime()))
+            player.getInventory().addItem(Utils.getItemStack(
+                    Parkour.getSettings().getHideTime(), Utils.getTranslation("Other.Item_HideTime", false)));
+        
         if (Parkour.getParkourConfig().getCourseData().contains(courseName + ".JoinItemMaterial")){
             Material joinItem = Material.getMaterial(Parkour.getParkourConfig().getCourseData().getString(courseName + ".JoinItemMaterial"));
             if (joinItem != null) {
